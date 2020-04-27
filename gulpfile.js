@@ -12,6 +12,7 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const sass = require('gulp-sass');
+const babel = require('gulp-babel');
 
 var packageJson = null;
 var banner = [
@@ -63,6 +64,11 @@ function js() {
     return src('./src/js/mailtoui.js')
         .pipe(eslint())
         .pipe(eslint.format())
+        .pipe(
+            babel({
+                presets: ['@babel/preset-env']
+            })
+        )
         .pipe(minify({ noSource: true }))
         .pipe(header(banner, { pkg: packageJson }))
         .pipe(dest('dist'));
